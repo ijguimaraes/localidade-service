@@ -1,4 +1,4 @@
-package br.com.evoluum.localidadeservice;
+package br.com.evoluum.localidade;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

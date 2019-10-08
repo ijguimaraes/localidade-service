@@ -1,4 +1,4 @@
-package br.com.evoluum.localidadeservice;
+package br.com.evoluum.localidade;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LocalidadeServiceApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(LocalidadeServiceApplication.class, args);
+
 	}
+
+
 
 }

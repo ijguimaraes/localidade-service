@@ -1,4 +1,4 @@
-package br.com.evoluum.localidadeservice.dto;
+package br.com.evoluum.localidade.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
