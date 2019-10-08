@@ -5,7 +5,7 @@ import br.com.evoluum.localidade.service.LocalidadeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -52,7 +52,10 @@ public class LocalidadeRest {
 
     @ApiOperation(value = "Pelo nome da cidade retornar o ID da cidade")
     @GetMapping(value = "/cidade")
+    @Cacheable(cacheNames = "ids")
     public int retornarIdCidade(@RequestParam("nomeCidade") String nomeCidade) {
+
+        log.info("Nome da cidade para pesquisa: " + nomeCidade);
 
         return localidadeService.obterIdCidade(nomeCidade);
 
