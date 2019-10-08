@@ -3,22 +3,19 @@ package br.com.evoluum.localidade.service;
 import br.com.evoluum.localidade.dto.LocalidadeDTO;
 import br.com.evoluum.localidade.model.Municipio;
 import br.com.evoluum.localidade.repository.MunicipioRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Log4j2
 public class LocalidadeService {
 
     private final MunicipioRepository municipioRepository;
@@ -29,15 +26,9 @@ public class LocalidadeService {
 
     public List<LocalidadeDTO> obterTodosEmJson() {
 
-        List<LocalidadeDTO> dtos = new ArrayList<>();
-
-        for (Municipio m : municipioRepository.obterTodosMunicipios()) {
-
-            dtos.add(convertMunicipioParaLocalidadeDTO(m));
-
-        }
-
-        return dtos;
+        return municipioRepository.obterTodosMunicipios().stream()
+                .map(this::convertMunicipioParaLocalidadeDTO)
+                .collect(Collectors.toList());
 
     }
 
@@ -80,7 +71,7 @@ public class LocalidadeService {
                 .with(csvSchema)
                 .writeValue(os, dtos);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Erro ao converter dados para CSV!");
         }
 
         return os.toByteArray();
@@ -88,6 +79,20 @@ public class LocalidadeService {
     }
 
     public int obterIdCidade(String nomeCidade) {
-        return 0;
+
+        Municipio municipio = municipioRepository.obterMunicipioPorNome(nomeCidade);
+
+        if (municipio != null) {
+
+            return municipio.getId();
+
+        } else {
+
+            log.warn("Não foi encontrado nenhuma cidade com o nome "+nomeCidade);
+
+            return 0;
+
+        }
+
     }
 }

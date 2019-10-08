@@ -2,6 +2,7 @@ package br.com.evoluum.localidade.repository;
 
 import br.com.evoluum.localidade.model.Municipio;
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Repository
+@Log4j2
 public class MunicipioRepository {
 
     private final RestTemplate restTemplate;
@@ -37,16 +39,24 @@ public class MunicipioRepository {
 
     }
 
-    public JsonNode obterTodosMunicipiosJson(){
+    public Municipio obterMunicipioPorNome(String nome) {
 
-        ResponseEntity<JsonNode> response = restTemplate.exchange(
+        ResponseEntity<List<Municipio>> response = restTemplate.exchange(
                 ibgeUrl + "/municipios",
                 HttpMethod.GET,
                 null,
-                JsonNode.class);
+                new ParameterizedTypeReference<List<Municipio>>(){});
 
-        return response.getBody();
+        List<Municipio> municipios = response.getBody();
+
+        Municipio municipio = municipios.stream()
+                .filter(e -> e.getNome().toLowerCase().equals(nome.toLowerCase()))
+                .findAny()
+                .orElse(null);
+
+        return municipio;
 
     }
+
 
 }

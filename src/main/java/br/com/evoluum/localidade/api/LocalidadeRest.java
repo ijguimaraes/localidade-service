@@ -4,6 +4,7 @@ import br.com.evoluum.localidade.dto.LocalidadeDTO;
 import br.com.evoluum.localidade.service.LocalidadeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @Api(value = "Localidades")
+@Log4j2
 public class LocalidadeRest {
 
     private final LocalidadeService localidadeService;
