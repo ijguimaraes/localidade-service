@@ -38,8 +38,8 @@ public class LocalidadeRest {
 
     }
 
-    @ApiOperation(value = "Lista todos os registros em CSV")
-    @GetMapping(value = "/todos-csv")
+    @ApiOperation(value = "Pelo nome da cidade retornar o ID da cidade")
+    @GetMapping(value = "/cidade")
     public int retornarIdCidade(@RequestParam("nomeCidade") String nomeCidade) {
 
         return localidadeService.obterIdCidade(nomeCidade);
