@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LocalidadeDTO {
-    private String idEstado;
+    private int idEstado;
     private String siglaEstado;
     private String regiaoNome;
     private String nomeCidade;
