@@ -1,6 +1,7 @@
 package br.com.evoluum.localidade.repository;
 
 import br.com.evoluum.localidade.model.Municipio;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,13 +27,23 @@ public class MunicipioRepository {
 
     public List<Municipio> obterTodosMunicipios() {
 
-        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-
         ResponseEntity<List<Municipio>> response = restTemplate.exchange(
                 ibgeUrl + "/municipios",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Municipio>>(){});
+
+        return response.getBody();
+
+    }
+
+    public JsonNode obterTodosMunicipiosJson(){
+
+        ResponseEntity<JsonNode> response = restTemplate.exchange(
+                ibgeUrl + "/municipios",
+                HttpMethod.GET,
+                null,
+                JsonNode.class);
 
         return response.getBody();
 

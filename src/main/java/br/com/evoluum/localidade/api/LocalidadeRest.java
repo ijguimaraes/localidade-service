@@ -5,6 +5,8 @@ import br.com.evoluum.localidade.service.LocalidadeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,9 +34,17 @@ public class LocalidadeRest {
 
     @ApiOperation(value = "Lista todos os registros em CSV")
     @GetMapping(value = "/todos-csv")
-    public byte[] retornarTodosCsv() {
+    public HttpEntity<byte[]> retornarTodosCsv() {
 
-        return localidadeService.obterTodosEmCsv();
+        byte[] documentBody = localidadeService.obterTodosEmCsv();
+
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        header.set(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=lista-localidades.csv");
+        header.setContentLength(documentBody.length);
+
+        return new HttpEntity<byte[]>(documentBody, header);
 
     }
 

@@ -15,5 +15,5 @@ public class LocalidadeDTO {
     private String regiaoNome;
     private String nomeCidade;
     private String nomeMesorregiao;
-    private String nomeFormatado; // {cidade/UF}
+    private String nomeFormatado;
 }
