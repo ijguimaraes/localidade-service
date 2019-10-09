@@ -8,6 +8,7 @@
 		<version>2.1.9.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>br.com.evoluum</groupId>
 	<artifactId>localidade-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -56,6 +57,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+			<version>2.1.3.RELEASE</version>
 		</dependency>
 
 		<dependency>

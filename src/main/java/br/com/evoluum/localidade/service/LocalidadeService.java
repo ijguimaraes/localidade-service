@@ -3,14 +3,14 @@ package br.com.evoluum.localidade.service;
 import br.com.evoluum.localidade.dto.LocalidadeDTO;
 import br.com.evoluum.localidade.model.Municipio;
 import br.com.evoluum.localidade.repository.MunicipioRepository;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvParser;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import br.com.evoluum.localidade.service.exportacao.CondicaoExportador;
+import br.com.evoluum.localidade.service.exportacao.ExportadorArquivo;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,11 +20,14 @@ public class LocalidadeService {
 
     private final MunicipioRepository municipioRepository;
 
-    public LocalidadeService(MunicipioRepository municipioRepository) {
+    private final CondicaoExportador condicaoExportador;
+
+    public LocalidadeService(MunicipioRepository municipioRepository, CondicaoExportador condicaoExportador) {
         this.municipioRepository = municipioRepository;
+        this.condicaoExportador = condicaoExportador;
     }
 
-    public List<LocalidadeDTO> obterTodosEmJson() {
+    public List<LocalidadeDTO> obterTodos() {
 
         return municipioRepository.obterTodosMunicipios().stream()
                 .map(this::convertMunicipioParaLocalidadeDTO)
@@ -47,34 +50,11 @@ public class LocalidadeService {
 
     public byte[] obterTodosEmCsv() {
 
-        List<LocalidadeDTO> dtos = municipioRepository.obterTodosMunicipios().stream()
-                .map(this::convertMunicipioParaLocalidadeDTO)
-                .collect(Collectors.toList());
+        ExportadorArquivo exportadorArquivo = condicaoExportador.obterExportadorArquivo();
 
+        OutputStream os = exportadorArquivo.exportar(obterTodos());
 
-        CsvSchema.Builder csvSchemaBuilder = CsvSchema.builder();
-        csvSchemaBuilder.addColumn("idEstado");
-        csvSchemaBuilder.addColumn("siglaEstado");
-        csvSchemaBuilder.addColumn("regiaoNome");
-        csvSchemaBuilder.addColumn("nomeCidade");
-        csvSchemaBuilder.addColumn("nomeMesorregiao");
-        csvSchemaBuilder.addColumn("nomeFormatado");
-        CsvSchema csvSchema = csvSchemaBuilder.build().withHeader();
-
-        CsvMapper csvMapper = new CsvMapper();
-        csvMapper.enable(CsvParser.Feature.WRAP_AS_ARRAY);
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-        try {
-            csvMapper.writer(csvSchema.withLineSeparator("\n"))
-                .with(csvSchema)
-                .writeValue(os, dtos);
-        } catch (IOException e) {
-            log.error("Erro ao converter dados para CSV!");
-        }
-
-        return os.toByteArray();
+        return ((ByteArrayOutputStream) os).toByteArray();
 
     }
 

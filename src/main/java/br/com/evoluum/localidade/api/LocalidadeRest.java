@@ -30,7 +30,7 @@ public class LocalidadeRest {
     @GetMapping(value = "/todos-json", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<LocalidadeDTO> retornarTodosJson() {
 
-        return localidadeService.obterTodosEmJson();
+        return localidadeService.obterTodos();
 
     }
 

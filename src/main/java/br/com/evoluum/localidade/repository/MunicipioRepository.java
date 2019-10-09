@@ -41,20 +41,10 @@ public class MunicipioRepository {
 
     public Municipio obterMunicipioPorNome(String nome) {
 
-        ResponseEntity<List<Municipio>> response = restTemplate.exchange(
-                ibgeUrl + "/municipios",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<Municipio>>(){});
-
-        List<Municipio> municipios = response.getBody();
-
-        Municipio municipio = municipios.stream()
+        return obterTodosMunicipios().parallelStream()
                 .filter(e -> e.getNome().toLowerCase().equals(nome.toLowerCase()))
                 .findAny()
                 .orElse(null);
-
-        return municipio;
 
     }
 
