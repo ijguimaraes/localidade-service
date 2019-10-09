@@ -49,7 +49,7 @@ public class MunicipioRepository {
 
     }
 
-    @HystrixCommand(fallbackMethod = "webServiceForaDoAr")
+    @HystrixCommand(fallbackMethod = "webServiceForaDoArPorNomeMunicipio")
     public Municipio obterMunicipioPorNome(String nome) {
 
         return obterTodosMunicipios().parallelStream()
@@ -59,9 +59,9 @@ public class MunicipioRepository {
 
     }
 
-    public Municipio webServiceForaDoAr(String nome){
+    public Municipio webServiceForaDoArPorNomeMunicipio(String nome){
 
-        log.error("WEB SERVICE IBGE ESTA FORA!" );
+        log.error("WEB SERVICE IBGE ESTA FORA! BUSCA POR NOME MUNICÍPIO." );
 
         return new Municipio();
 
